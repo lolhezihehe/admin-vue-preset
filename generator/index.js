@@ -16,7 +16,6 @@ function deleteFiles(api) {
   ]
   // https://github.com/vuejs/vue-cli/issues/2470
   api.render(files => {
-    console.log(Object.keys(files))
     return Object.keys(files)
       .filter(name => oriFiles.indexOf(name) > -1)
       .forEach(name => delete files[name])

@@ -6,8 +6,9 @@
 </template>
 
 <script>
-import config from "@/config";
+// https://github.com/wangfupeng1988/wangEditor
 import E from 'wangeditor'
+import config from "@/config";
 export default {
   props: {
     value: {
