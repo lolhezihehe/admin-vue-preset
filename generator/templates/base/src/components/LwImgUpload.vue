@@ -1,6 +1,7 @@
 <template>
   <el-upload
     ref="upload"
+    v-bind="$attrs"
     v-loading="loading"
     element-loading-text="上传中"
     element-loading-spinner="el-icon-loading"
@@ -15,7 +16,6 @@
     :action="actionUrl"
     :show-file-list="false"
     :style="{height: size, width: size}"
-    v-bind="$attrs"
   >
     <img v-if="imageUrl" :src="imageUrl" class="lw-img" :style="{height: size, width: size}" />
     <i
@@ -71,10 +71,18 @@ export default {
     beforeUpload() {
       this.loading = true;
     },
+    onPending() {
+      this.status = 'pending';
+    },
     onChange(file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     onSuccess(res, file) {
+      if (res.respCode !== 0) {
+        this.onError();
+        this.$message.error('图片上传失败');
+        return false;
+      }
       const data = res.content;
       this.loading = false;
       this.status = 'success';
@@ -90,15 +98,12 @@ export default {
       this.loading = false;
       this.status = 'error';
     },
-    onPending() {
-      this.status = 'pending';
-      this.imageUrl = '';
-    },
   },
   watch: {
     defaultUrl: {
       handler() {
         this.imageUrl = this.defaultUrl;
+        this.onPending();
       },
       immediate: true
     }
